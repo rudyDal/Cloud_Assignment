@@ -1,0 +1,84 @@
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
+<style>
+    b {
+        font-family: cursive;
+    }
+    #form-container{
+        text-align: center;
+    }
+    #height-error,#weight-error{
+        color: darkred;
+    }
+    #bmi-value{
+        text-align: center;
+    }
+    #heading{
+        background: blanchedalmond;
+        font-size: 25px;
+        margin-bottom: 25px;
+        margin-top: -8px;
+    }
+    #height-input, #weight-input{
+        margin-top: 2%;
+    }
+    #bmi-value{
+        margin-top: 2%;
+    }
+    #submit{
+        margin-top: 2%;
+    }
+</style>
+<script>
+    function getBMI320(){
+        document.getElementById("bmi-value").innerHTML = "";
+        var height = document.getElementById("ht").value;
+        if(!(height > 0)){
+            document.getElementById("height-error").innerHTML = "Height should be a positive value";
+            
+        }else{
+            document.getElementById("height-error").innerHTML = "";
+        }
+        var weight = document.getElementById("wt").value;
+        if(!(weight > 0)){
+            document.getElementById("weight-error").innerHTML = "Weight should be a positive value";   
+        }else{
+            document.getElementById("weight-error").innerHTML = "";
+        }
+        if(!(height > 0) || !(weight > 0)){
+            return;
+        }
+
+        var params = {"height": height,"weight":weight};
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", 'https://shrouded-wave-66562.herokuapp.com/bmi320', true);
+
+    
+        xhr.setRequestHeader("Content-Type", "application/json; utf-8");
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                document.getElementById("bmi-value").innerHTML = "Your BMI is : " + JSON.parse(this.response).bmi;
+            }
+        }
+        xhr.send(JSON.stringify(params));
+        
+    }
+</script>
+
+<div id="form-container">
+    <div id = "heading"> BMI Calculator</div>
+    <div id = "container">
+    <div id = "height-input">Height : <input type="number" name="height" id="ht" min = 1 required placeholder="Height in meters"></div>
+    <div id = "height-error"></div>
+    <div id = "weight-input">Weight : <input type="number" name="weight" id="wt" min = 1 required placeholder="Weight in kilograms"></div>
+    <div id = "weight-error"></div>
+    <div id = "submit"><input type="submit" onclick="getBMI320()"></div>
+    </div>
+</div>
+<div id="bmi-value">
+
+</div>
+
+
+
